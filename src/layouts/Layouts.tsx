@@ -12,7 +12,7 @@ interface LayoutsProps {
 const Layouts: React.FC<LayoutsProps> = props => {
   return (
     <div className='layout w-full h-screen flex text-white'>
-      <div className='sidebar w-[58px] h-screen bg-primary  border-r-[2px] border-borderColor'>
+      <div className='sidebar w-[75px] h-screen bg-primary  border-r-[2px] border-borderColor'>
         {props.sidenav}
       </div>
       <div className='content flex-1 flex'>
