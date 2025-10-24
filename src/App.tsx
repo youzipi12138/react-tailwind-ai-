@@ -1,6 +1,6 @@
 import Layouts from '@/layouts/Layouts';
 import SideNav from '@/layouts/components/SideNav';
-import SideList from '@/layouts/components/SideList';
+import SideList from '@/layouts/components/SideList/SideList';
 import TopBar from '@/layouts/components/TopBar';
 import AppRouter from '@/router';
 

@@ -26,7 +26,7 @@ const SideNav: React.FC = () => {
         <ActionIcon
           icon={MessageSquare}
           size='large'
-          color={location.pathname === '/chat' ? 'blu' : 'gray'}
+          color={location.pathname === '/chat' ? 'blue' : 'gray'}
           title='对话'
           tooltipProps={{
             placement: 'right',

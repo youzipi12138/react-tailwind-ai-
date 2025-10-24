@@ -33,5 +33,11 @@ body {
   --color-secondary: #00f6ff;
   --color-dimWhite: rgba(255, 255, 255, 0.7);
   --color-dimBlue: rgba(9, 151, 124, 0.1);
+
   --color-borderColor: rgb(35, 35, 35);
+  --color-secondaryBorderColor: rgb(15, 15, 15);
+  --color-lightTextColor: #fff;
+  --color-darkTextColor: rgb(111, 111, 111);
 }
+/* --color-borderColor 边框的颜色 menu组件选中的颜色  */
+/* --color-secondaryBorderColor hover的颜色 */

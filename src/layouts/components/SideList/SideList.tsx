@@ -1,5 +1,6 @@
 import React from 'react';
 import PanelHeader from '@/components/panelHeader';
+import Menu from './components/Menu';
 
 const SideList: React.FC = () => {
   return (
@@ -7,7 +8,9 @@ const SideList: React.FC = () => {
       <div className='header'>
         <PanelHeader />
       </div>
-      <div className='body'></div>
+      <div className='body'>
+        <Menu />
+      </div>
     </div>
   );
 };
