@@ -1,5 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
 /* v4的导入方式 */
-@import 'tailwindcss';
+@import "tailwindcss";
+
+/* 设置所有元素使用border-box模型 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 确保HTML和body占满整个视口 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 防止滚动条出现 */
+}
+
+/* 确保根元素也占满视口 */
+#root {
+  width: 100%;
+  height: 100%;
+}
 
 /* 自定义颜色定义 - Tailwind CSS v4 方式 */
 @theme {
@@ -8,4 +33,5 @@
   --color-secondary: #00f6ff;
   --color-dimWhite: rgba(255, 255, 255, 0.7);
   --color-dimBlue: rgba(9, 151, 124, 0.1);
+  --color-borderColor: rgb(35, 35, 35);
 }
