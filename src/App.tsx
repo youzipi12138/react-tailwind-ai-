@@ -2,7 +2,7 @@ import Layouts from '@/layouts/Layouts';
 import SideNav from '@/layouts/components/SideNav';
 import SideList from '@/layouts/components/SideList';
 import TopBar from '@/layouts/components/TopBar';
-import MainContent from '@/layouts/components/MainContent';
+import AppRouter from '@/router';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       sidenav={<SideNav />}
       sideList={<SideList />}
       top={<TopBar />}
-      main={<MainContent />}
+      main={<AppRouter />}
     />
   );
 }
