@@ -1,0 +1,11 @@
+/* v4的导入方式 */
+@import 'tailwindcss';
+
+/* 自定义颜色定义 - Tailwind CSS v4 方式 */
+@theme {
+  --color-primary: #000;
+  --color-primaryLight: #fff;
+  --color-secondary: #00f6ff;
+  --color-dimWhite: rgba(255, 255, 255, 0.7);
+  --color-dimBlue: rgba(9, 151, 124, 0.1);
+}
