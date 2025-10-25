@@ -1,7 +1,7 @@
 import React from 'react';
 import PanelHeader from '@/components/panelHeader';
 import Menu from './components/Menu';
-
+import AckBase from './components/ackBase';
 const SideList: React.FC = () => {
   return (
     <div>
@@ -10,6 +10,7 @@ const SideList: React.FC = () => {
       </div>
       <div className='body'>
         <Menu />
+        <AckBase />
       </div>
     </div>
   );
