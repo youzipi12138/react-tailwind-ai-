@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActionIcon } from '@lobehub/ui';
-import { Compass, FolderClosed, MessageSquare, Palette } from 'lucide-react';
+import {
+  Compass,
+  FolderClosed,
+  MessageSquare,
+  Palette,
+  SunMedium,
+  MoonStar,
+} from 'lucide-react';
+
 import { Link, useLocation } from 'react-router-dom';
 import { avatar } from '@/assets';
 import './SideNav.css';
 const SideNav: React.FC = () => {
   const location = useLocation();
 
+  const [isSun, setIsSun] = useState(false);
+
   return (
     <div className='flex flex-col items-center justify-between h-[300px] mt-10'>
-      <div className='avatar w-[35px] h-[35px] rounded-full overflow-hidden'>
+      <div className='avatar w-[35px] h-[35px] rounded-full overflow-hidden mb-4'>
         <a
           href='https://github.com/youzipi12138'
           target='_blank'
@@ -74,6 +84,7 @@ const SideNav: React.FC = () => {
           className='custom-action-icon'
         ></ActionIcon>
       </Link>
+      <ActionIcon icon={isSun ? SunMedium : MoonStar} color='gray'></ActionIcon>
     </div>
   );
 };
