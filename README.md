@@ -70,4 +70,5 @@ export default defineConfig([
     },
   },
 ]);
+# 支持黑夜白天切换
 ```
