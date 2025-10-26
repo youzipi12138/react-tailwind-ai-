@@ -88,10 +88,4 @@ const useModalStyles = createStyles(({ css, token, prefixCls }) => {
   };
 });
 
-const useModalInputStyles = createStyles(({ css, token, prefixCls }) => {
-  return {
-    // 定义一个样式块（如 inputWrapper），使用时绑定到 Input 所在的容器
-  };
-});
-
-export { useModalStyles, useModalInputStyles };
+export { useModalStyles };

@@ -3,7 +3,7 @@ import { ActionIcon } from '@lobehub/ui';
 import { Plus, ChevronDown, ChevronRight, BookOpen } from 'lucide-react';
 import { Button, Modal, Form, Input, theme } from 'antd';
 import type { FormProps } from 'antd';
-import { useModalStyles, useModalInputStyles } from './styles/styles';
+import { useModalStyles } from './styles/styles';
 
 type FieldType = {
   ackName: string;
@@ -28,7 +28,6 @@ const AckBaseHeader: React.FC = () => {
   const [isShowCreateAckModal, setIsShowCreateAckModal] = useState(false);
   const [form] = Form.useForm();
   const { styles: ModalStyle } = useModalStyles();
-  const { styles: InputStyle } = useModalInputStyles();
 
   const onCancel = () => {
     form.resetFields();
@@ -97,7 +96,7 @@ const AckBaseHeader: React.FC = () => {
         </Modal>
       </div>
       <div className='ackBody'>
-        <div className='text-white'>{token.colorPrimary}</div>
+        <div className='text-white'>吃饭</div>
       </div>
     </div>
   );

@@ -15,5 +15,7 @@ declare module 'antd/es/theme/interface' {
     myTexthighlight: string;
     myTextDarkColor: string;
     MyCloseActiveColor: string;
+
+    MyMenuHoverColor: string;
   }
 }

@@ -32,6 +32,8 @@ function App() {
             myTexthighlight: '#fff',
             myTextDarkColor: '#000',
             MyCloseActiveColor: 'rgba(255,255,255,0.16)',
+
+            MyMenuHoverColor: 'rgb(35, 35, 35)',
           },
         }}
         // prefixCls='lobe'
