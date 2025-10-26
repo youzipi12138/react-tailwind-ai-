@@ -95,9 +95,6 @@ const AckBaseHeader: React.FC = () => {
           </Form>
         </Modal>
       </div>
-      <div className='ackBody'>
-        <div className='text-white'>吃饭</div>
-      </div>
     </div>
   );
 };
