@@ -7,7 +7,7 @@ const AckBaseBody: React.FC = () => {
   const { folders, loading, isEmpty, deleteFolder } = useFolders();
 
   if (loading) {
-    return <div>正在加载</div>;
+    return <div></div>;
   }
 
   if (isEmpty) {

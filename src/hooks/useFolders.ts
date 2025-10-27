@@ -13,7 +13,6 @@ export const useFolders = () => {
     fetchFolders,
     creating,
     createFolder,
-    deleting,
     deleteFolder,
   } = useFileStore();
 
@@ -28,14 +27,12 @@ export const useFolders = () => {
     folders,
     loading,
     creating,
-    deleting,
     error,
 
     // 操作方法
     refresh: fetchFolders,
     createFolder,
     deleteFolder,
-
     // 计算属性
     isEmpty: folders.length === 0,
   };
