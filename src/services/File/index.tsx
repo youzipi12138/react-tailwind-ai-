@@ -1,9 +1,13 @@
-import { get, request } from '@/services/index';
+import { get, post } from '@/services/index';
 import Result from '../Result';
-import type { FolderItem } from '@/services/File/types/folder';
+import type {
+  FolderItem,
+  CreateFolderParams,
+  GetAllFolderResponse,
+} from '@/services/File/types/folder';
 
 // 获取所有文件夹
-export const getAllFolder: () => Promise<Result<FolderItem>> = () => {
+export const getAllFolder: () => Promise<Result<GetAllFolderResponse>> = () => {
   return get('/folders');
 };
 
@@ -13,8 +17,8 @@ export const getFolderById = (id: string) => {
 };
 
 // 创建文件夹
-export const createFolder = (data: { name: string; path: string }) => {
-  return get('/upload', data);
+export const createFolder = (data: CreateFolderParams) => {
+  return post('/folders', data);
 };
 
 // 更新文件夹

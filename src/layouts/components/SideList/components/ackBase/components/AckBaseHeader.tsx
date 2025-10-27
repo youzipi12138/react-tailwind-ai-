@@ -4,22 +4,8 @@ import { Plus, ChevronDown, ChevronRight, BookOpen } from 'lucide-react';
 import { Button, Modal, Form, Input, theme } from 'antd';
 import type { FormProps } from 'antd';
 import { useModalStyles } from './styles/styles';
-
-type FieldType = {
-  ackName: string;
-  ackDesc?: string;
-};
-const onFinish: FormProps<FieldType>['onFinish'] = values => {
-  // TODO: Handle form submission
-  // eslint-disable-next-line no-console
-  console.log('Success:', values);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
-  // TODO: Handle form validation errors
-  // eslint-disable-next-line no-console
-  console.log('Failed:', errorInfo);
-};
+import { useFolders } from '@/hooks/useFolders';
+import type { CreateFolderParams } from '@/services/File/types/folder';
 
 const { useToken } = theme;
 
@@ -34,6 +20,18 @@ const AckBaseHeader: React.FC = () => {
     setIsShowCreateAckModal(false);
   };
   const { token } = useToken();
+
+  const { creating, createFolder } = useFolders();
+  const onFinish: FormProps<CreateFolderParams>['onFinish'] = async values => {
+    try {
+      await createFolder(values);
+      // 创建成功后关闭弹窗并重置表单
+      form.resetFields();
+      setIsShowCreateAckModal(false);
+    } catch (error) {
+      console.error('Failed:', error);
+    }
+  };
 
   return (
     <div>
@@ -72,24 +70,23 @@ const AckBaseHeader: React.FC = () => {
             layout='vertical'
             style={{ maxWidth: 600 }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
           >
-            <Form.Item<FieldType>
+            <Form.Item<CreateFolderParams>
               label='知识库名称'
-              name='ackName'
+              name='name'
               rules={[{ required: true, message: '请输入知识库名称' }]}
               labelCol={{ style: { color: token.myTexthighlight } }}
             >
               <Input placeholder='知识库' />
             </Form.Item>
-            <Form.Item<FieldType>
+            <Form.Item<CreateFolderParams>
               label='知识库详情'
-              name='ackDesc'
+              name='description'
               rules={[{ required: false, message: '请输入知识库详情' }]}
             >
               <Input.TextArea rows={5} placeholder='知识库简介（选题）' />
             </Form.Item>
-            <Button type='primary' block>
+            <Button type='primary' block htmlType='submit' loading={creating}>
               新建
             </Button>
           </Form>
