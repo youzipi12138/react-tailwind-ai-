@@ -19,7 +19,7 @@ function App() {
           token: {
             // 主色调
             colorPrimary: '#000',
-
+            mycolorlogo: 'rgba(0, 246, 255, 0.5)',
             // 完全自定义的 token 类名
             myModalBgColor: '#1A1A1A', // 例如：自定义一个字符串类型的令牌
             myInputBgColor: '#272727',

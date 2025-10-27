@@ -40,22 +40,24 @@ body {
   --color-darkTextColor: rgb(111, 111, 111);
 
   --color-myInputBgColor: #272727;
-  --color-myModalBgColor: #1A1A1A;
+  --color-myModalBgColor: #1a1a1a;
 
-  --color-myInputBorder: #1A1A1A;
+  --color-myInputBorder: #1a1a1a;
   --color-myInputBgHover: #313131;
   --color-myInputBorderFoucs: #fff;
 
-  --color-myButtonColor: #EEEEEE;
-  --color-myButtonColorHover: #FFFFFF;
+  --color-myButtonColor: #eeeeee;
+  --color-myButtonColorHover: #ffffff;
 
   --color-myTextColor: rgb(111, 111, 111);
   --color-myTexthighlight: #fff;
   --color-myTextDarkColor: #000;
 
-  --color-MyCloseActiveColor: rgba(255,255,255,0.16);
+  --color-MyCloseActiveColor: rgba(255, 255, 255, 0.16);
 
   --color-MyMenuHoverColor: rgb(35, 35, 35);
+
+  --color-mycolorlogo: rgba(0, 246, 255, 0.5);
 }
 /* --color-borderColor 边框的颜色 menu组件选中的颜色  */
 /* --color-secondaryBorderColor hover的颜色 */

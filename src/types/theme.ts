@@ -17,5 +17,6 @@ declare module 'antd/es/theme/interface' {
     MyCloseActiveColor: string;
 
     MyMenuHoverColor: string;
+    mycolorlogo: string;
   }
 }
