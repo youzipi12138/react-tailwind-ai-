@@ -12,6 +12,7 @@ import {
 
 import type { FolderItem } from '@/services/File/types/folder';
 import { useFolders } from '@/hooks/useFolders';
+import { useNavigate } from 'react-router-dom';
 interface MenuPropsComponent {
   folders: FolderItem[];
   onDelete: (id: string) => Promise<void>;
@@ -46,12 +47,14 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
         break;
     }
   };
+  // 跳转路由
+  const navigate = useNavigate();
 
   return (
     <div className='Menu text-myTexthighlight'>
       {folders.map(folder => (
         <div
-          className='Menu-item mx-2 my-2 h-[40px] rounded-md flex justify-between px-2 items-center hover:bg-MyMenuHoverColor group'
+          className='Menu-item hover:bg-MyMenuHoverColor group mx-2 my-2 flex h-[40px] cursor-pointer items-center justify-between rounded-md px-2'
           key={folder.id}
           style={{
             animation: 'fadeIn 0.3s ease-in-out', // 新增项淡入动画
@@ -59,7 +62,10 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
           }}
         >
           <Icon icon={Book}></Icon>
-          <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
+          <span
+            className='mx-4 flex-1 overflow-hidden text-[14px] text-ellipsis whitespace-nowrap'
+            onClick={() => navigate(`/Files/${folder.id}`)}
+          >
             {folder.name}
           </span>
           <Dropdown
@@ -71,7 +77,7 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
           >
             <Icon
               icon={MoreVertical}
-              className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
+              className='cursor-pointer opacity-0 transition-opacity duration-200 group-hover:opacity-100'
             ></Icon>
           </Dropdown>
         </div>

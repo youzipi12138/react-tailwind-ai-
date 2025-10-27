@@ -18,8 +18,8 @@ const SideNav: React.FC = () => {
   const [isSun, setIsSun] = useState(false);
 
   return (
-    <div className='flex flex-col items-center justify-between h-[300px] mt-10'>
-      <div className='avatar w-[35px] h-[35px] rounded-full overflow-hidden mb-4'>
+    <div className='mt-10 flex h-[300px] flex-col items-center justify-between'>
+      <div className='avatar mb-4 h-[35px] w-[35px] overflow-hidden rounded-full'>
         <a
           href='https://github.com/youzipi12138'
           target='_blank'
@@ -28,7 +28,7 @@ const SideNav: React.FC = () => {
           <img
             src={avatar}
             alt=''
-            className='w-full h-full rounded-full object-cover cursor-pointer'
+            className='h-full w-full cursor-pointer rounded-full object-cover'
           ></img>
         </a>
       </div>

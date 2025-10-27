@@ -10,7 +10,7 @@ interface LayoutsProps {
 const MenuItemAck: React.FC<LayoutsProps> = props => {
   return (
     <div
-      className={`h-[45px] mx-2 my-2 flex items-center text-[14px]  rounded-sm transition-colors duration-200 cursor-pointer ${
+      className={`mx-2 my-2 flex h-[45px] cursor-pointer items-center rounded-sm text-[14px] transition-colors duration-200 ${
         props.active ? 'bg-borderColor' : 'hover:bg-secondaryBorderColor'
       }`}
     >

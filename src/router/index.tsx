@@ -10,6 +10,7 @@ const AppRouter = () => {
       <Route path='/' element={<Navigate to='/chat' replace />} />
       <Route path='/chat' element={<Chat />} />
       <Route path='/knowledge' element={<Knowledge />} />
+      <Route path='/Files/:id' element={<div>Files</div>} />
       <Route path='/art' element={<Art />} />
       <Route path='/explore' element={<Explore />} />
     </Routes>

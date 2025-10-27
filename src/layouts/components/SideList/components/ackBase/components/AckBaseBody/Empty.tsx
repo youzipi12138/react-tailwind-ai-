@@ -26,7 +26,7 @@ const Empty: React.FC = () => {
   const { token } = useToken();
   return (
     <div>
-      <div className='flex flex-row-reverse mr-[22px] mb-2'>
+      <div className='mr-[22px] mb-2 flex flex-row-reverse'>
         <LineIcon color={token.myTextColor} />
       </div>
       <p

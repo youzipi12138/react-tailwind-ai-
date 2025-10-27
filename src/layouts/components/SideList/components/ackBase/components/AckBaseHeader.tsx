@@ -37,7 +37,7 @@ const AckBaseHeader: React.FC<{ onShowMenu: () => void }> = ({
 
   return (
     <div>
-      <div className='ackHeader flex items-center  justify-between mx-2 my-2'>
+      <div className='ackHeader mx-2 my-2 flex items-center justify-between'>
         <div className='flex items-center gap-1'>
           <ActionIcon
             icon={isRight ? ChevronRight : ChevronDown}
@@ -59,7 +59,7 @@ const AckBaseHeader: React.FC<{ onShowMenu: () => void }> = ({
         ></ActionIcon>
         <Modal
           title={
-            <div className='flex items-center gap-2 mb-5'>
+            <div className='mb-5 flex items-center gap-2'>
               <BookOpen size={18} />
               新建知识库
             </div>
