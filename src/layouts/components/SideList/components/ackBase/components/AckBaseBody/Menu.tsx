@@ -11,26 +11,42 @@ import {
 } from 'lucide-react';
 
 import type { FolderItem } from '@/services/File/types/folder';
-
+import { useFolders } from '@/hooks/useFolders';
 interface MenuPropsComponent {
   folders: FolderItem[];
+  onDelete: (id: string) => Promise<void>;
 }
 
 const items: MenuProps['items'] = [
   {
-    key: '1',
+    key: 'rename',
     label: '重命名',
     icon: <Icon icon={PencilLine} />,
   },
   {
-    key: '2',
+    key: 'delete',
     label: '删除',
     icon: <Icon icon={Trash} />,
     danger: true,
   },
 ];
 
-const Menu: React.FC<MenuPropsComponent> = ({ folders }) => {
+const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
+  // 处理菜单点击事件
+  const handleMenuClick = (folder: FolderItem, menuKey: string) => {
+    switch (menuKey) {
+      case 'rename':
+        // TODO: 打开重命名对话框
+        // console.log('重命名文件夹:', folder.id);
+        break;
+      case 'delete':
+        // TODO: 删除文件夹
+        // console.log('删除文件夹:', folder.id);
+        onDelete(folder.id);
+        break;
+    }
+  };
+
   return (
     <div className='Menu text-myTexthighlight'>
       {folders.map(folder => (
@@ -42,7 +58,13 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders }) => {
           <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
             {folder.name}
           </span>
-          <Dropdown menu={{ items }} trigger={['click']}>
+          <Dropdown
+            menu={{
+              items,
+              onClick: ({ key }) => handleMenuClick(folder, key),
+            }}
+            trigger={['click']}
+          >
             <Icon
               icon={MoreVertical}
               className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'

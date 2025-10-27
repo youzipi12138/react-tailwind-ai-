@@ -6,8 +6,16 @@ import { useFileStore } from '@/store/File';
  * 提供自动加载、状态管理和便捷的操作方法
  */
 export const useFolders = () => {
-  const { folders, loading, error, fetchFolders, creating, createFolder } =
-    useFileStore();
+  const {
+    folders,
+    loading,
+    error,
+    fetchFolders,
+    creating,
+    createFolder,
+    deleting,
+    deleteFolder,
+  } = useFileStore();
 
   // 组件挂载时自动获取数据  //useEffect 是异步函数，console.log()是同步的
   useEffect(() => {
@@ -20,11 +28,13 @@ export const useFolders = () => {
     folders,
     loading,
     creating,
+    deleting,
     error,
 
     // 操作方法
     refresh: fetchFolders,
     createFolder,
+    deleteFolder,
 
     // 计算属性
     isEmpty: folders.length === 0,
