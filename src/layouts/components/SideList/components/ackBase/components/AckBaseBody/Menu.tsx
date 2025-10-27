@@ -51,8 +51,12 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
     <div className='Menu text-myTexthighlight'>
       {folders.map(folder => (
         <div
-          className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'
+          className='Menu-item mx-2 my-2 h-[40px] rounded-md flex justify-between px-2 items-center hover:bg-MyMenuHoverColor group'
           key={folder.id}
+          style={{
+            animation: 'fadeIn 0.3s ease-in-out', // 新增项淡入动画
+            transition: 'all 0.2s ease-in-out', // 位置变化平滑过渡
+          }}
         >
           <Icon icon={Book}></Icon>
           <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
@@ -72,6 +76,18 @@ const Menu: React.FC<MenuPropsComponent> = ({ folders, onDelete }) => {
           </Dropdown>
         </div>
       ))}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };

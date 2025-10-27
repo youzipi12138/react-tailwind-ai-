@@ -6,10 +6,6 @@ import Menu from './Menu';
 const AckBaseBody: React.FC = () => {
   const { folders, loading, isEmpty, deleteFolder } = useFolders();
 
-  if (loading) {
-    return <div></div>;
-  }
-
   if (isEmpty) {
     return <Empty />;
   } else {
