@@ -9,7 +9,9 @@ import type { CreateFolderParams } from '@/services/File/types/folder';
 
 const { useToken } = theme;
 
-const AckBaseHeader: React.FC = () => {
+const AckBaseHeader: React.FC<{ onShowMenu: () => void }> = ({
+  onShowMenu,
+}) => {
   const [isRight, setIsRight] = useState(false);
   const [isShowCreateAckModal, setIsShowCreateAckModal] = useState(false);
   const [form] = Form.useForm();
@@ -40,7 +42,11 @@ const AckBaseHeader: React.FC = () => {
           <ActionIcon
             icon={isRight ? ChevronRight : ChevronDown}
             color='var(--color-darkTextColor)'
-            onClick={() => setIsRight(!isRight)}
+            onClick={() => {
+              setIsRight(!isRight);
+              onShowMenu();
+              console.log('onShowMenu');
+            }}
           ></ActionIcon>
           <span className='text-darkTextColor'>知识库</span>
         </div>
