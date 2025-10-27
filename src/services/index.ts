@@ -175,3 +175,18 @@ export const get = <T>(
 ): Promise<Result<T>> => {
   return promise(request({ url, method: 'get', params, timeout }), loading);
 };
+/**
+ * 发送post请求   一般用来请求资源
+ * @param url    资源url
+ * @param data 参数
+ * @param loading loading
+ * @returns 异步promise对象
+ */
+export const post = <T>(
+  url: string,
+  data?: unknown,
+  loading?: NProgress | boolean,
+  timeout?: number
+): Promise<Result<T>> => {
+  return promise(request({ url, method: 'post', data, timeout }), loading);
+};
