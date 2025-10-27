@@ -190,3 +190,12 @@ export const post = <T>(
 ): Promise<Result<T>> => {
   return promise(request({ url, method: 'post', data, timeout }), loading);
 };
+
+export const Delete = <T>(
+  url: string,
+  data?: unknown,
+  loading?: NProgress | boolean,
+  timeout?: number
+): Promise<Result<T>> => {
+  return promise(request({ url, method: 'delete', data, timeout }), loading);
+};
