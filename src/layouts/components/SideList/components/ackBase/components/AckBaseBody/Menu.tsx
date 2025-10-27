@@ -10,6 +10,12 @@ import {
   Book,
 } from 'lucide-react';
 
+import type { FolderItem } from '@/services/File/types/folder';
+
+interface MenuPropsComponent {
+  folders: FolderItem[];
+}
+
 const items: MenuProps['items'] = [
   {
     key: '1',
@@ -24,61 +30,26 @@ const items: MenuProps['items'] = [
   },
 ];
 
-const Menu: React.FC = () => {
+const Menu: React.FC<MenuPropsComponent> = ({ folders }) => {
   return (
     <div className='Menu text-myTexthighlight'>
-      <div className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'>
-        <Icon icon={Book}></Icon>
-        <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
-          知识库的名称知识库的名称知sadfasfsdfasf
-        </span>
-        <Dropdown menu={{ items }} trigger={['click']}>
-          <Icon
-            icon={MoreVertical}
-            onClick={() => console.log(11)}
-            className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
-          ></Icon>
-        </Dropdown>
-      </div>
-      <div className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'>
-        <Icon icon={Book}></Icon>
-        <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
-          知识库的名称知识库的名称知sadfasfsdfasf
-        </span>
-        <Dropdown menu={{ items }} trigger={['click']}>
-          <Icon
-            icon={MoreVertical}
-            onClick={() => console.log(11)}
-            className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
-          ></Icon>
-        </Dropdown>
-      </div>
-      <div className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'>
-        <Icon icon={Book}></Icon>
-        <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
-          知识库的名称知识库的名称知sadfasfsdfasf
-        </span>
-        <Dropdown menu={{ items }} trigger={['click']}>
-          <Icon
-            icon={MoreVertical}
-            onClick={() => console.log(11)}
-            className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
-          ></Icon>
-        </Dropdown>
-      </div>
-      <div className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'>
-        <Icon icon={Book}></Icon>
-        <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
-          知识库的名称知识库的名称知sadfasfsdfasf
-        </span>
-        <Dropdown menu={{ items }} trigger={['click']}>
-          <Icon
-            icon={MoreVertical}
-            onClick={() => console.log(11)}
-            className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
-          ></Icon>
-        </Dropdown>
-      </div>
+      {folders.map(folder => (
+        <div
+          className='Menu-item mx-2 my-2 h-[40px] rounded-md flex  justify-between px-2 items-center hover:bg-MyMenuHoverColor group'
+          key={folder.id}
+        >
+          <Icon icon={Book}></Icon>
+          <span className='flex-1 mx-4 text-ellipsis overflow-hidden whitespace-nowrap text-[14px]'>
+            {folder.name}
+          </span>
+          <Dropdown menu={{ items }} trigger={['click']}>
+            <Icon
+              icon={MoreVertical}
+              className='cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200'
+            ></Icon>
+          </Dropdown>
+        </div>
+      ))}
     </div>
   );
 };
