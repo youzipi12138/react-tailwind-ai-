@@ -199,3 +199,69 @@ export const Delete = <T>(
 ): Promise<Result<T>> => {
   return promise(request({ url, method: 'delete', data, timeout }), loading);
 };
+
+/**
+ * 文件上传接口配置
+ */
+export interface UploadOptions {
+  url: string; // 上传地址
+  file: File; // 文件对象
+  fieldName?: string; // 文件字段名，默认 'file_to_upload'
+  // eslint-disable-next-line no-unused-vars
+  onProgress?: (percent: number) => void; // 上传进度回调
+  data?: Record<string, string | Blob>; // 额外的表单数据
+  timeout?: number; // 超时时间
+}
+
+/**
+ * 通用文件上传方法
+ * @param options 上传配置
+ * @returns Promise<Result<T>>
+ */
+export const upload = <T>(options: UploadOptions): Promise<Result<T>> => {
+  const {
+    url,
+    file,
+    fieldName = 'file_to_upload',
+    onProgress,
+    data,
+    timeout,
+  } = options;
+
+  // 创建 FormData
+  const formData = new FormData();
+  formData.append(fieldName, file);
+
+  // 添加额外的表单数据
+  if (data) {
+    Object.keys(data).forEach(key => {
+      formData.append(key, data[key]);
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    request({
+      url,
+      method: 'post',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: timeout || 30000, // 默认30秒超时
+      onUploadProgress: progressEvent => {
+        if (onProgress && progressEvent.total) {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          onProgress(percent);
+        }
+      },
+    })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
