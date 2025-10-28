@@ -12,7 +12,9 @@ interface ImageStore {
   images: ImageItem[];
   loading: boolean; // 获取列表的加载状态
   error: string | null;
-
+  selectedImageIds: Set<string>; // 选中的图片 ID 集合
+  isGrid: boolean;
+  isList: boolean;
   // 操作
   fetchImages: () => Promise<void>;
   // eslint-disable-next-line no-unused-vars
@@ -20,6 +22,13 @@ interface ImageStore {
   // eslint-disable-next-line no-unused-vars
   uploadImage: (file: File) => Promise<void>;
   clearError: () => void;
+  // eslint-disable-next-line no-unused-vars
+  toggleImageSelection: (id: string) => void; // 切换单个图片选中状态
+  toggleSelectAll: () => void; // 切换全选/取消全选
+  // eslint-disable-next-line no-unused-vars
+  setIsGrid: (isGrid: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  setIsList: (isList: boolean) => void;
 }
 
 // 创建 store
@@ -28,7 +37,9 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   images: [],
   loading: false,
   error: null,
-
+  selectedImageIds: new Set<string>(),
+  isGrid: false,
+  isList: false,
   // 获取图片列表
   fetchImages: async () => {
     set({ loading: true, error: null });
@@ -84,4 +95,36 @@ export const useImageStore = create<ImageStore>((set, get) => ({
 
   // 清除错误
   clearError: () => set({ error: null }),
+
+  // 切换单个图片的选中状态
+  toggleImageSelection: (id: string) => {
+    const { selectedImageIds } = get();
+    const newSelected = new Set(selectedImageIds);
+
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+
+    set({ selectedImageIds: newSelected });
+  },
+
+  // 切换全选/取消全选
+  toggleSelectAll: () => {
+    const { images, selectedImageIds } = get();
+    const allSelected =
+      selectedImageIds.size === images.length && images.length > 0;
+
+    if (allSelected) {
+      // 全部选中 → 取消全选
+      set({ selectedImageIds: new Set<string>() });
+    } else {
+      // 部分选中或未选中 → 全选
+      set({ selectedImageIds: new Set(images.map(img => img.id)) });
+    }
+  },
+
+  setIsGrid: (isGrid: boolean) => set({ isGrid }),
+  setIsList: (isList: boolean) => set({ isList }),
 }));
