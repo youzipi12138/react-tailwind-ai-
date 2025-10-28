@@ -35,6 +35,14 @@ function App() {
 
             MyMenuHoverColor: 'rgb(35, 35, 35)',
           },
+          components: {
+            Dropdown: {
+              colorBgElevated: '#272727', // 下拉菜单背景色
+              colorText: '#fff', // 文字颜色
+              controlItemBgHover: '#313131', // hover 背景色
+              colorTextDescription: 'rgb(111, 111, 111)', // 描述文字颜色
+            },
+          },
         }}
         // prefixCls='lobe'
       >
