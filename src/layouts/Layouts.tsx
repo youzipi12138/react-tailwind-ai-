@@ -30,7 +30,9 @@ const Layouts: React.FC<LayoutsProps> = props => {
           <div className='topbar bg-primary border-borderColor h-[60px] w-full border-b-2'>
             {props.top}
           </div>
-          <div className='main bg-primary flex-1'>{props.main}</div>
+          <div className='main bg-primary flex-1 overflow-y-auto'>
+            {props.main}
+          </div>
         </div>
       </div>
     </div>

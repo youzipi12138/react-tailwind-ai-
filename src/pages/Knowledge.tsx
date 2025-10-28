@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ImageList from './KnowledgeComponents/image';
-
+import KnowledgeHeader from './components/KnowledgeHeader';
 const Knowledge: React.FC = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
@@ -21,11 +21,7 @@ const Knowledge: React.FC = () => {
         );
       case 'images':
         return (
-          <div className='p-12'>
-            <h2 className='text-lightTextColor mb-4 text-2xl font-bold'>
-              图片列表
-            </h2>
-            <p className='text-darkTextColor'>这里显示所有图片文件</p>
+          <div className='h-full overflow-y-auto p-6'>
             <ImageList />
           </div>
         );
@@ -63,7 +59,12 @@ const Knowledge: React.FC = () => {
     }
   };
 
-  return <div>{renderContent()}</div>;
+  return (
+    <div className=''>
+      <KnowledgeHeader />
+      {renderContent()}
+    </div>
+  );
 };
 
 export default Knowledge;
