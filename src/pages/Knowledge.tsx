@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import ImageList from './KnowledgeComponents/image';
 
 const Knowledge: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,12 +21,12 @@ const Knowledge: React.FC = () => {
         );
       case 'images':
         return (
-          <div className='p-6'>
+          <div className='p-12'>
             <h2 className='text-lightTextColor mb-4 text-2xl font-bold'>
               图片列表
             </h2>
             <p className='text-darkTextColor'>这里显示所有图片文件</p>
-            {/* 这里可以添加图片网格组件 */}
+            <ImageList />
           </div>
         );
       case 'audio':

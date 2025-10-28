@@ -3,56 +3,57 @@ import React, { useState } from 'react';
 import { ActionIcon } from '@lobehub/ui';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useUIStore } from '@/store/ui';
+import { useImages } from '@/hooks/useImages';
 import type { MenuProps } from 'antd';
-import { Dropdown, Upload, message } from 'antd';
+import { Dropdown, Upload } from 'antd';
 import { Icon } from '@lobehub/ui';
 import { Folder, Upload as UploadIcon } from 'lucide-react';
-import type { UploadProps } from 'antd';
-
-const props: UploadProps = {
-  name: 'file_to_upload',
-  action: 'http://localhost:4000/api/upload',
-  headers: {
-    // authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      // message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
-
-const items: MenuProps['items'] = [
-  {
-    key: 'uploadFile',
-    label: (
-      <Upload {...props} showUploadList={false}>
-        <div className='text-myTexthighlight'>上传文件</div>
-      </Upload>
-    ),
-    icon: <Icon icon={UploadIcon} />,
-    onClick: () => {
-      // console.log('上传文件');
-    },
-  },
-  {
-    key: 'uploadFolder',
-    label: '上传文件夹',
-    icon: <Icon icon={Folder} />,
-    onClick: () => {
-      console.log('上传文件夹');
-    },
-  },
-];
 
 const TopBar: React.FC = () => {
   const { isSideListCollapsed, toggleSideList } = useUIStore();
+  const { uploadImage } = useImages();
   const [inputValue, setInputValue] = useState('');
+
+  // 自定义上传逻辑（使用 store 的方法）
+  const customUpload = async (file: File) => {
+    try {
+      await uploadImage(file);
+    } catch {
+      // 错误已经在 store 里处理了
+    }
+  };
+
+  const items: MenuProps['items'] = [
+    {
+      key: 'uploadFile',
+      label: (
+        <Upload
+          customRequest={async ({ file }) => {
+            await customUpload(file as File);
+          }}
+          showUploadList={false}
+        >
+          <div className='text-myTexthighlight'>上传文件</div>
+        </Upload>
+      ),
+      icon: <Icon icon={UploadIcon} />,
+    },
+    {
+      key: 'uploadFolder',
+      label: (
+        <Upload
+          directory
+          customRequest={async ({ file }) => {
+            await customUpload(file as File);
+          }}
+          showUploadList={false}
+        >
+          <div className='text-myTexthighlight'>上传文件夹</div>
+        </Upload>
+      ),
+      icon: <Icon icon={Folder} />,
+    },
+  ];
 
   return (
     <div className='ml-4 flex h-full items-center'>
