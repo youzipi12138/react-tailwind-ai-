@@ -29,7 +29,32 @@ const columns: TableProps<tableDataType>['columns'] = [
 ];
 
 const ImageTable: React.FC = () => {
-  const { images } = useImages();
+  const { images, selectedImageIds, toggleImageSelection } = useImages();
+
+  const rowSelection = {
+    selectedRowKeys: Array.from(selectedImageIds),
+    hideSelectAll: true,
+    onChange: (selectedRowKeys: React.Key[]) => {
+      // 处理选中变化
+      const newSelectedIds = new Set(selectedRowKeys as string[]);
+      const currentSelectedIds = selectedImageIds;
+
+      // 找出新增的选中项
+      newSelectedIds.forEach(id => {
+        if (!currentSelectedIds.has(id)) {
+          toggleImageSelection(id);
+        }
+      });
+
+      // 找出取消选中的项
+      currentSelectedIds.forEach(id => {
+        if (!newSelectedIds.has(id)) {
+          toggleImageSelection(id);
+        }
+      });
+    },
+  };
+
   return (
     <div className='w-full'>
       <style>
@@ -88,6 +113,8 @@ const ImageTable: React.FC = () => {
         <Table
           dataSource={images}
           columns={columns}
+          rowKey='id'
+          rowSelection={rowSelection}
           pagination={{ pageSize: 11 }}
           className='fixed-height-table'
         />
