@@ -2,7 +2,6 @@ import React from 'react';
 import { Table } from 'antd';
 import type { TableProps } from 'antd/es/table';
 import type { DocumentItem as tableDataType } from '@/services/Documents/types';
-import { useDocuments } from '@/hooks/useDocment';
 import { formatFileSize, formatTime } from '@/utils/format/index';
 
 const columns: TableProps<tableDataType>['columns'] = [
@@ -29,37 +28,42 @@ const columns: TableProps<tableDataType>['columns'] = [
   },
 ];
 
-const DocumentTable: React.FC = () => {
-  const { Document: documents, selectedDocumentIds, toggleDocumentSelection } = useDocuments();
+interface DocumentTableProps {
+  documents: tableDataType[];
+  selectedDocumentIds: Set<string>;
+  toggleDocumentSelection: (id: string) => void;
+}
 
-  const rowSelection = {
-    selectedRowKeys: Array.from(selectedDocumentIds),
-    hideSelectAll: true,
-    onChange: (selectedRowKeys: React.Key[]) => {
-      // 处理选中变化
-      const newSelectedIds = new Set(selectedRowKeys as string[]);
-      const currentSelectedIds = selectedDocumentIds;
+const DocumentTable: React.FC<DocumentTableProps> = React.memo(
+  ({ documents, selectedDocumentIds, toggleDocumentSelection }) => {
+    const rowSelection = {
+      selectedRowKeys: Array.from(selectedDocumentIds),
+      hideSelectAll: true,
+      onChange: (selectedRowKeys: React.Key[]) => {
+        // 处理选中变化
+        const newSelectedIds = new Set(selectedRowKeys as string[]);
+        const currentSelectedIds = selectedDocumentIds;
 
-      // 找出新增的选中项
-      newSelectedIds.forEach(id => {
-        if (!currentSelectedIds.has(id)) {
-          toggleDocumentSelection(id);
-        }
-      });
+        // 找出新增的选中项
+        newSelectedIds.forEach(id => {
+          if (!currentSelectedIds.has(id)) {
+            toggleDocumentSelection(id);
+          }
+        });
 
-      // 找出取消选中的项
-      currentSelectedIds.forEach(id => {
-        if (!newSelectedIds.has(id)) {
-          toggleDocumentSelection(id);
-        }
-      });
-    },
-  };
+        // 找出取消选中的项
+        currentSelectedIds.forEach(id => {
+          if (!newSelectedIds.has(id)) {
+            toggleDocumentSelection(id);
+          }
+        });
+      },
+    };
 
-  return (
-    <div className='w-full'>
-      <style>
-        {`
+    return (
+      <div className='w-full'>
+        <style>
+          {`
           .fixed-height-table-wrapper {
             min-height: 540px;
           }
@@ -109,20 +113,29 @@ const DocumentTable: React.FC = () => {
             color: rgba(255, 255, 255, 0.65) !important;
           }
         `}
-      </style>
-      <div className='fixed-height-table-wrapper w-full'>
-        <Table
-          dataSource={documents}
-          columns={columns}
-          rowKey='id'
-          rowSelection={rowSelection}
-          pagination={{ pageSize: 11 }}
-          className='fixed-height-table'
-        />
+        </style>
+        <div className='fixed-height-table-wrapper w-full'>
+          <Table
+            dataSource={documents}
+            columns={columns}
+            rowKey='id'
+            rowSelection={rowSelection}
+            pagination={{ pageSize: 11 }}
+            className='fixed-height-table'
+          />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.documents === nextProps.documents &&
+      prevProps.selectedDocumentIds === nextProps.selectedDocumentIds &&
+      prevProps.toggleDocumentSelection === nextProps.toggleDocumentSelection
+    );
+  }
+);
+
+DocumentTable.displayName = 'DocumentTable';
 
 export default DocumentTable;
-

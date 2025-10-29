@@ -50,14 +50,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
       if (code !== 200) {
         throw new Error(message);
       }
-      set({ images: data });
+      // 合并状态更新，减少重新渲染次数
+      set({ images: data, loading: false });
     } catch (error) {
       // 这里捕获的是业务错误
       const errorMessage = error instanceof Error ? error.message : '获取失败';
-      set({ error: errorMessage });
+      set({ error: errorMessage, loading: false });
       // 不在这里弹窗，让组件决定如何展示
-    } finally {
-      set({ loading: false });
     }
   },
 

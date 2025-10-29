@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDocuments } from '@/hooks/useDocment';
 import KnowledgeHeader from '../../components/KnowledgeHeader';
 import DocumentList from './DocumentList';
@@ -7,6 +7,7 @@ import Upload from '../../components/Upload';
 
 const DocumentsView: React.FC = () => {
   const {
+    Document: documents,
     documentCount,
     selectedCount,
     isAllSelected,
@@ -15,8 +16,23 @@ const DocumentsView: React.FC = () => {
     isGrid,
     deleteDocument,
     toggleSelectAll,
+    toggleDocumentSelection,
     setIsGrid,
   } = useDocuments();
+
+  // 使用 useCallback 缓存回调函数
+  const handleToggleDocument = useCallback(
+    (documentId: string) => {
+      toggleDocumentSelection(documentId);
+    },
+    [toggleDocumentSelection]
+  );
+
+  // 缓存数组转换
+  const selectedDocumentIdsArray = useMemo(
+    () => Array.from(selectedDocumentIds),
+    [selectedDocumentIds]
+  );
 
   return (
     <div className='h-full'>
@@ -26,7 +42,7 @@ const DocumentsView: React.FC = () => {
           selectedCount={selectedCount}
           isAllSelected={isAllSelected}
           isIndeterminate={isIndeterminate}
-          selectedImageIds={Array.from(selectedDocumentIds)}
+          selectedImageIds={selectedDocumentIdsArray}
           deleteImage={deleteDocument}
           toggleSelectAll={toggleSelectAll}
           setIsGrid={setIsGrid}
@@ -36,9 +52,17 @@ const DocumentsView: React.FC = () => {
       <div className='flex h-full justify-center overflow-y-auto p-6'>
         {documentCount > 0 ? (
           isGrid ? (
-            <DocumentList />
+            <DocumentList
+              documents={documents}
+              selectedDocumentIds={selectedDocumentIds}
+              toggleDocumentSelection={handleToggleDocument}
+            />
           ) : (
-            <DocumentTable />
+            <DocumentTable
+              documents={documents}
+              selectedDocumentIds={selectedDocumentIds}
+              toggleDocumentSelection={handleToggleDocument}
+            />
           )
         ) : (
           <div className='mt-[200px]'>

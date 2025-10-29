@@ -2,8 +2,8 @@ import React from 'react';
 import { Table } from 'antd';
 import type { TableProps } from 'antd/es/table';
 import type { ImageItem as tableDataType } from '@/services/images/types';
-import { useImages } from '@/hooks/useImages';
 import { formatFileSize, formatTime } from '@/utils/format/index';
+
 const columns: TableProps<tableDataType>['columns'] = [
   {
     title: '文件',
@@ -28,37 +28,42 @@ const columns: TableProps<tableDataType>['columns'] = [
   },
 ];
 
-const ImageTable: React.FC = () => {
-  const { images, selectedImageIds, toggleImageSelection } = useImages();
+interface ImageTableProps {
+  images: tableDataType[];
+  selectedImageIds: Set<string>;
+  toggleImageSelection: (id: string) => void;
+}
 
-  const rowSelection = {
-    selectedRowKeys: Array.from(selectedImageIds),
-    hideSelectAll: true,
-    onChange: (selectedRowKeys: React.Key[]) => {
-      // 处理选中变化
-      const newSelectedIds = new Set(selectedRowKeys as string[]);
-      const currentSelectedIds = selectedImageIds;
+const ImageTable: React.FC<ImageTableProps> = React.memo(
+  ({ images, selectedImageIds, toggleImageSelection }) => {
+    const rowSelection = {
+      selectedRowKeys: Array.from(selectedImageIds),
+      hideSelectAll: true,
+      onChange: (selectedRowKeys: React.Key[]) => {
+        // 处理选中变化
+        const newSelectedIds = new Set(selectedRowKeys as string[]);
+        const currentSelectedIds = selectedImageIds;
 
-      // 找出新增的选中项
-      newSelectedIds.forEach(id => {
-        if (!currentSelectedIds.has(id)) {
-          toggleImageSelection(id);
-        }
-      });
+        // 找出新增的选中项
+        newSelectedIds.forEach(id => {
+          if (!currentSelectedIds.has(id)) {
+            toggleImageSelection(id);
+          }
+        });
 
-      // 找出取消选中的项
-      currentSelectedIds.forEach(id => {
-        if (!newSelectedIds.has(id)) {
-          toggleImageSelection(id);
-        }
-      });
-    },
-  };
+        // 找出取消选中的项
+        currentSelectedIds.forEach(id => {
+          if (!newSelectedIds.has(id)) {
+            toggleImageSelection(id);
+          }
+        });
+      },
+    };
 
-  return (
-    <div className='w-full'>
-      <style>
-        {`
+    return (
+      <div className='w-full'>
+        <style>
+          {`
           .fixed-height-table-wrapper {
             min-height: 540px;
           }
@@ -108,19 +113,30 @@ const ImageTable: React.FC = () => {
             color: rgba(255, 255, 255, 0.65) !important;
           }
         `}
-      </style>
-      <div className='fixed-height-table-wrapper w-full'>
-        <Table
-          dataSource={images}
-          columns={columns}
-          rowKey='id'
-          rowSelection={rowSelection}
-          pagination={{ pageSize: 11 }}
-          className='fixed-height-table'
-        />
+        </style>
+        <div className='fixed-height-table-wrapper w-full'>
+          <Table
+            dataSource={images}
+            columns={columns}
+            rowKey='id'
+            rowSelection={rowSelection}
+            pagination={{ pageSize: 11 }}
+            className='fixed-height-table'
+          />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+  // 自定义比较函数
+  (prevProps, nextProps) => {
+    return (
+      prevProps.images === nextProps.images &&
+      prevProps.selectedImageIds === nextProps.selectedImageIds &&
+      prevProps.toggleImageSelection === nextProps.toggleImageSelection
+    );
+  }
+);
+
+ImageTable.displayName = 'ImageTable';
 
 export default ImageTable;

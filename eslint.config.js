@@ -66,7 +66,13 @@ export default [
       ],
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { argsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': 'warn',
