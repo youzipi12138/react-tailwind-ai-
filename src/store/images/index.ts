@@ -18,7 +18,7 @@ interface ImageStore {
   // 操作
   fetchImages: () => Promise<void>;
   // eslint-disable-next-line no-unused-vars
-  deleteImage: (id: string) => Promise<void>;
+  deleteImage: (ids: string[]) => Promise<void>;
   // eslint-disable-next-line no-unused-vars
   uploadImage: (file: File) => Promise<void>;
   clearError: () => void;
@@ -62,14 +62,16 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   },
 
   // 删除图片
-  deleteImage: async (id: string) => {
+  deleteImage: async (ids: string[]) => {
     try {
-      const { code, message } = await deleteImageApi(id);
+      const { code, message } = await deleteImageApi(ids);
       // 处理业务逻辑错误
       if (code !== 200) {
         throw new Error(message);
       }
       await get().fetchImages();
+      // 删除成功后清空选中状态
+      set({ selectedImageIds: new Set<string>() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '删除失败';
       set({ error: errorMessage });

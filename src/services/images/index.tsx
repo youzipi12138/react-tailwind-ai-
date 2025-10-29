@@ -6,8 +6,8 @@ export const getImageList: () => Promise<Result<ImageItem[]>> = () => {
   return get('/images');
 };
 
-export const deleteImage = (id: string): Promise<Result<void>> => {
-  return Delete(`/images/${id}`);
+export const deleteImage = (ids: string[]): Promise<Result<void>> => {
+  return Delete(`/images/batch`, ids);
 };
 
 /**

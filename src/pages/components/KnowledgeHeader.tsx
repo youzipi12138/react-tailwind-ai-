@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ActionIcon } from '@lobehub/ui';
 import { List, LayoutGrid } from 'lucide-react';
 import { useImages } from '@/hooks/useImages';
-
+import { Button, Popconfirm } from 'antd';
 const KnowledgeHeader: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const {
@@ -10,6 +10,8 @@ const KnowledgeHeader: React.FC = () => {
     selectedCount,
     isAllSelected,
     isIndeterminate,
+    selectedImageIds,
+    deleteImage,
     toggleSelectAll,
     setIsGrid,
   } = useImages();
@@ -25,7 +27,7 @@ const KnowledgeHeader: React.FC = () => {
 
   return (
     <div className='border-borderColor mx-6 flex h-[50px] items-center justify-between border-b py-2'>
-      <div className='flex items-center'>
+      <div className='flex items-center gap-2'>
         <input
           ref={checkboxRef}
           type='checkbox'
@@ -37,6 +39,18 @@ const KnowledgeHeader: React.FC = () => {
           {selectedCount > 0 ? `已选 ${selectedCount} / ` : ''}共 {imageCount}{' '}
           项
         </span>
+        {selectedCount > 0 && (
+          <Popconfirm
+            title='确定要删除吗？'
+            onConfirm={() => deleteImage(Array.from(selectedImageIds))}
+            okText='确定'
+            cancelText='取消'
+          >
+            <Button type='primary' style={{ height: '32px' }} danger>
+              批量删除
+            </Button>
+          </Popconfirm>
+        )}
       </div>
       <div className='flex items-center gap-2'>
         <ActionIcon
