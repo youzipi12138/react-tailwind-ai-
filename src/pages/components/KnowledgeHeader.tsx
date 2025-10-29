@@ -10,6 +10,7 @@ interface KnowledgeHeaderProps {
   isAllSelected: boolean;
   isIndeterminate: boolean;
   selectedImageIds: string[];
+  isGrid: boolean;
   deleteImage: (imageIds: string[]) => void;
   toggleSelectAll: () => void;
   setIsGrid: (isGrid: boolean) => void;
@@ -22,12 +23,11 @@ const KnowledgeHeader: React.FC<KnowledgeHeaderProps> = props => {
     isAllSelected,
     isIndeterminate,
     selectedImageIds,
+    isGrid,
     deleteImage,
     toggleSelectAll,
     setIsGrid,
   } = props;
-
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const checkboxRef = useRef<HTMLInputElement>(null);
 
@@ -69,24 +69,22 @@ const KnowledgeHeader: React.FC<KnowledgeHeaderProps> = props => {
         <ActionIcon
           icon={List}
           color={
-            viewMode === 'list'
+            isGrid === false
               ? 'var(--color-myTexthighlight)'
               : 'var(--color-myTextColor)'
           }
           onClick={() => {
-            setViewMode('list');
             setIsGrid(false);
           }}
         />
         <ActionIcon
           icon={LayoutGrid}
           color={
-            viewMode === 'grid'
+            isGrid === true
               ? 'var(--color-myTexthighlight)'
               : 'var(--color-myTextColor)'
           }
           onClick={() => {
-            setViewMode('grid');
             setIsGrid(true);
           }}
         />

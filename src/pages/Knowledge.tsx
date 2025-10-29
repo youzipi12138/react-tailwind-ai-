@@ -95,6 +95,7 @@ const Knowledge: React.FC = () => {
           deleteImage={deleteImage}
           toggleSelectAll={toggleSelectAll}
           setIsGrid={setIsGrid}
+          isGrid={isGrid}
         />
       )}
       {renderContent()}
