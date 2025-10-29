@@ -31,7 +31,7 @@ const columns: TableProps<tableDataType>['columns'] = [
 const ImageTable: React.FC = () => {
   const { images } = useImages();
   return (
-    <div>
+    <div className='w-full'>
       <style>
         {`
           .fixed-height-table-wrapper {
@@ -45,7 +45,7 @@ const ImageTable: React.FC = () => {
           }
         `}
       </style>
-      <div className='fixed-height-table-wrapper'>
+      <div className='fixed-height-table-wrapper w-full'>
         <Table
           dataSource={images}
           columns={columns}

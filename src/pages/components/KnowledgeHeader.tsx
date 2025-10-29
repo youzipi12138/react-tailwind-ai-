@@ -3,8 +3,19 @@ import { ActionIcon } from '@lobehub/ui';
 import { List, LayoutGrid } from 'lucide-react';
 import { useImages } from '@/hooks/useImages';
 import { Button, Popconfirm } from 'antd';
-const KnowledgeHeader: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+interface KnowledgeHeaderProps {
+  imageCount: number;
+  selectedCount: number;
+  isAllSelected: boolean;
+  isIndeterminate: boolean;
+  selectedImageIds: string[];
+  deleteImage: (imageIds: string[]) => void;
+  toggleSelectAll: () => void;
+  setIsGrid: (isGrid: boolean) => void;
+}
+
+const KnowledgeHeader: React.FC<KnowledgeHeaderProps> = props => {
   const {
     imageCount,
     selectedCount,
@@ -14,7 +25,9 @@ const KnowledgeHeader: React.FC = () => {
     deleteImage,
     toggleSelectAll,
     setIsGrid,
-  } = useImages();
+  } = props;
+
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const checkboxRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +55,7 @@ const KnowledgeHeader: React.FC = () => {
         {selectedCount > 0 && (
           <Popconfirm
             title='确定要删除吗？'
-            onConfirm={() => deleteImage(Array.from(selectedImageIds))}
+            onConfirm={() => deleteImage(selectedImageIds.map(String))}
             okText='确定'
             cancelText='取消'
           >

@@ -34,6 +34,10 @@ function App() {
             MyCloseActiveColor: 'rgba(255,255,255,0.16)',
 
             MyMenuHoverColor: 'rgb(35, 35, 35)',
+            myUploadBgColor: '#151515',
+            myUploadTextColor: '#aaaaaa',
+            myUploadTextHoverColor: '#1F1F1F',
+            myUploadBorderColor: 'rgba(255, 255, 255, 0.06)',
           },
           components: {
             Dropdown: {

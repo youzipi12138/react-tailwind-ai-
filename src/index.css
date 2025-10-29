@@ -58,6 +58,11 @@ body {
   --color-MyMenuHoverColor: rgb(35, 35, 35);
 
   --color-mycolorlogo: rgba(0, 246, 255, 0.5);
+
+  --color-myUploadBgColor: #151515;
+  --color-myUploadTextColor: #aaaaaa;
+  --color-myUploadTextHoverColor: #1f1f1f;
+  --color-myUploadBorderColor: rgba(255, 255, 255, 0.06);
 }
 /* --color-borderColor 边框的颜色 menu组件选中的颜色  */
 /* --color-secondaryBorderColor hover的颜色 */

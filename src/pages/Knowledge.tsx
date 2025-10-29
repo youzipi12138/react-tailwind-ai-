@@ -4,10 +4,22 @@ import ImageList from './KnowledgeComponents/image';
 import KnowledgeHeader from './components/KnowledgeHeader';
 import ImageTable from './KnowledgeComponents/image/ImageTable';
 import { useImages } from '@/hooks/useImages';
+import Upload from './components/Upload';
 const Knowledge: React.FC = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const { isGrid } = useImages();
+
+  const {
+    imageCount,
+    selectedCount,
+    isAllSelected,
+    isIndeterminate,
+    selectedImageIds,
+    isGrid,
+    deleteImage,
+    toggleSelectAll,
+    setIsGrid,
+  } = useImages();
   // 根据不同的 category 参数渲染不同的内容
   const renderContent = () => {
     switch (category) {
@@ -23,8 +35,18 @@ const Knowledge: React.FC = () => {
         );
       case 'images':
         return (
-          <div className='h-full overflow-y-auto p-6'>
-            {isGrid ? <ImageList /> : <ImageTable />}
+          <div className='flex h-full justify-center overflow-y-auto p-6'>
+            {imageCount > 0 ? (
+              isGrid ? (
+                <ImageList />
+              ) : (
+                <ImageTable />
+              )
+            ) : (
+              <div className='mt-[200px]'>
+                <Upload />
+              </div>
+            )}
           </div>
         );
       case 'audio':
@@ -62,8 +84,19 @@ const Knowledge: React.FC = () => {
   };
 
   return (
-    <div className=''>
-      <KnowledgeHeader />
+    <div className='h-full'>
+      {imageCount > 0 && (
+        <KnowledgeHeader
+          imageCount={imageCount}
+          selectedCount={selectedCount}
+          isAllSelected={isAllSelected}
+          isIndeterminate={isIndeterminate}
+          selectedImageIds={Array.from(selectedImageIds)}
+          deleteImage={deleteImage}
+          toggleSelectAll={toggleSelectAll}
+          setIsGrid={setIsGrid}
+        />
+      )}
       {renderContent()}
     </div>
   );

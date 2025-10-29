@@ -18,5 +18,10 @@ declare module 'antd/es/theme/interface' {
 
     MyMenuHoverColor: string;
     mycolorlogo: string;
+
+    myUploadBgColor: string;
+    myUploadTextColor: string;
+    myUploadTextHoverColor: string;
+    myUploadBorderColor: string;
   }
 }
