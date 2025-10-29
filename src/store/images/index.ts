@@ -83,11 +83,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
     try {
       const { code, message } = await uploadImageApi(file);
       // 处理业务逻辑错误
-      if (code !== 200) {
+      if (code !== 201) {
         throw new Error(message);
       }
       await get().fetchImages();
+      console.log('上传成功');
     } catch (error) {
+      console.error('❌ [Store] 上传失败:', error);
       const errorMessage = error instanceof Error ? error.message : '上传失败';
       set({ error: errorMessage });
       throw error;

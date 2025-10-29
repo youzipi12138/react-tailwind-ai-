@@ -4,6 +4,7 @@ import { ActionIcon } from '@lobehub/ui';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useUIStore } from '@/store/ui';
 import ImagesUpload from './upload/ImagesUpload';
+import DocumentUpload from './upload/Document';
 
 const TopBar: React.FC = () => {
   const { isSideListCollapsed, toggleSideList } = useUIStore();
@@ -25,6 +26,7 @@ const TopBar: React.FC = () => {
         className='border-myInputBorder bg-myInputBgColor text-myTexthighlight placeholder-myTextColor focus:border-myInputBorderFocus ml-4 w-[300px] rounded-sm border px-2 py-1 outline-none'
       />
       <ImagesUpload />
+      <DocumentUpload />
     </div>
   );
 };

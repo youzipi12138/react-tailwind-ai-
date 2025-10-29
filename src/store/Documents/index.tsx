@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { getDocumentList, deleteDocument } from '@/services/Documents';
 import type { DocumentItem } from '@/services/Documents/types';
+import { uploadImage } from '@/services/images';
 
 // 定义 store 状态类型
 interface DocumentStore {
@@ -23,6 +24,8 @@ interface DocumentStore {
   setIsGrid: (isGrid: boolean) => void;
   // eslint-disable-next-line no-unused-vars
   setIsList: (isList: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  uploadDocument: (file: File) => Promise<void>;
 }
 
 // 创建 store
@@ -60,14 +63,30 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
     try {
       const { code, message } = await deleteDocument(ids);
       // 处理业务逻辑错误
-      if (code !== 200) {
+      if (code !== 201) {
         throw new Error(message);
       }
       await get().fetchDocuments();
+      console.log('文件获取');
       // 删除成功后清空选中状态
       set({ selectedDocumentIds: new Set<string>() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '删除失败';
+      set({ error: errorMessage });
+      throw error;
+    }
+  },
+  uploadDocument: async (file: File) => {
+    try {
+      const { code, message } = await uploadImage(file);
+      if (code !== 201) {
+        throw new Error(message);
+      }
+      await get().fetchDocuments();
+      console.log('文件获取');
+    } catch (error) {
+      console.error('上传失败:', error);
+      const errorMessage = error instanceof Error ? error.message : '上传失败';
       set({ error: errorMessage });
       throw error;
     }

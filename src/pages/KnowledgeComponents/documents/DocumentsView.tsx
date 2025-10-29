@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useDocuments } from '@/hooks/useDocment';
+import { useDocuments } from '@/hooks/useDocments';
 import KnowledgeHeader from '../../components/KnowledgeHeader';
 import DocumentList from './DocumentList';
 import DocumentTable from './DocumentTable';
