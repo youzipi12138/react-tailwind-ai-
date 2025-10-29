@@ -1,6 +1,9 @@
 import React from 'react';
 import { useDocuments } from '@/hooks/useDocment';
 import KnowledgeHeader from '../../components/KnowledgeHeader';
+import DocumentList from './DocumentList';
+import DocumentTable from './DocumentTable';
+import Upload from '../../components/Upload';
 
 const DocumentsView: React.FC = () => {
   const {
@@ -30,12 +33,18 @@ const DocumentsView: React.FC = () => {
           isGrid={isGrid}
         />
       )}
-      <div className='p-6'>
-        <h2 className='text-lightTextColor mb-4 text-2xl font-bold'>
-          文档列表
-        </h2>
-        <p className='text-darkTextColor'>这里显示所有文档文件</p>
-        {/* TODO: 这里可以添加文档列表组件 */}
+      <div className='flex h-full justify-center overflow-y-auto p-6'>
+        {documentCount > 0 ? (
+          isGrid ? (
+            <DocumentList />
+          ) : (
+            <DocumentTable />
+          )
+        ) : (
+          <div className='mt-[200px]'>
+            <Upload />
+          </div>
+        )}
       </div>
     </div>
   );
