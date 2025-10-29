@@ -1,4 +1,4 @@
-import { message, notification } from 'antd';
+import { getMessageInstance, getNotificationInstance } from './messageInstance';
 
 // 消息提示类型
 export type MessageType = 'success' | 'error' | 'warning' | 'info';
@@ -9,6 +9,12 @@ export const showMessage = (
   content: string,
   duration = 3
 ) => {
+  const message = getMessageInstance();
+  if (!message) {
+    // eslint-disable-next-line no-console
+    console.error('Message instance not initialized');
+    return;
+  }
   message[type]({
     content,
     duration,
@@ -45,6 +51,12 @@ export const showNotification = (
   description: string,
   duration = 4.5
 ) => {
+  const notification = getNotificationInstance();
+  if (!notification) {
+    // eslint-disable-next-line no-console
+    console.error('Notification instance not initialized');
+    return;
+  }
   notification[type]({
     message: title,
     description,
@@ -67,6 +79,7 @@ export const handleNetworkError = (error: unknown) => {
 };
 
 // API 错误处理
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const handleApiError = (error: any) => {
   let errorMessage = '请求失败';
 

@@ -4,6 +4,7 @@ import {
   deleteImage as deleteImageApi,
   uploadImage as uploadImageApi,
 } from '@/services/images';
+import { showSuccess } from '@/utils/notification';
 import type { ImageItem } from '@/services/images/types';
 
 // 定义 store 状态类型
@@ -50,6 +51,8 @@ export const useImageStore = create<ImageStore>((set, get) => ({
       if (code !== 200) {
         throw new Error(message);
       }
+      showSuccess(message);
+      console.log(message);
       // 合并状态更新，减少重新渲染次数
       set({ images: data, loading: false });
     } catch (error) {

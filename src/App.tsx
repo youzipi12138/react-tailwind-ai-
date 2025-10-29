@@ -4,6 +4,7 @@ import SideList from '@/layouts/components/SideList/SideList';
 import TopBar from '@/layouts/components/TopBar';
 import AppRouter from '@/router';
 import { ConfigProvider } from 'antd';
+import { AppProvider } from '@/utils/appContext';
 
 function App() {
   // const [primary, setPrimary] = React.useState('#1677ff');
@@ -50,17 +51,19 @@ function App() {
         }}
         // prefixCls='lobe'
       >
-        <Layouts
-          sidenav={<SideNav />}
-          sideList={<SideList />}
-          top={<TopBar />}
-          main={<AppRouter />}
-          // main={
-          //   <div>
-          //     <Button type='primary'>Submit</Button> <Input />
-          //   </div>
-          // }
-        />
+        <AppProvider>
+          <Layouts
+            sidenav={<SideNav />}
+            sideList={<SideList />}
+            top={<TopBar />}
+            main={<AppRouter />}
+            // main={
+            //   <div>
+            //     <Button type='primary'>Submit</Button> <Input />
+            //   </div>
+            // }
+          />
+        </AppProvider>
       </ConfigProvider>
     </>
   );

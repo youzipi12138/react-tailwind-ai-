@@ -35,7 +35,7 @@ const DocumentsView: React.FC = () => {
   );
 
   return (
-    <div className='h-full'>
+    <div className=''>
       {documentCount > 0 && (
         <KnowledgeHeader
           imageCount={documentCount}
