@@ -4,7 +4,8 @@ import Image from './Image';
 
 // 容器组件：负责数据获取和状态管理
 const ImageList: React.FC = () => {
-  const { images, selectedImageIds, toggleImageSelection } = useImages();
+  const { images, selectedImageIds, toggleImageSelection, isGrid } =
+    useImages();
 
   return (
     <div className='grid grid-cols-3 gap-4 lg:grid-cols-4 xl:grid-cols-5'>
