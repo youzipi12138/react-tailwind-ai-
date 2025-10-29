@@ -67,7 +67,7 @@ export const useFileStore = create<FileStore>((set, get) => ({
       if (code !== 200) {
         throw new Error(message);
       }
-      set({ folders: data.folders });
+      set({ folders: data });
     } catch (error) {
       // 这里捕获的是业务错误
       const errorMessage = error instanceof Error ? error.message : '获取失败';
