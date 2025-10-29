@@ -2,10 +2,12 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ImageList from './KnowledgeComponents/image';
 import KnowledgeHeader from './components/KnowledgeHeader';
+import ImageTable from './KnowledgeComponents/image/ImageTable';
+import { useImages } from '@/hooks/useImages';
 const Knowledge: React.FC = () => {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-
+  const { isGrid } = useImages();
   // 根据不同的 category 参数渲染不同的内容
   const renderContent = () => {
     switch (category) {
@@ -22,7 +24,7 @@ const Knowledge: React.FC = () => {
       case 'images':
         return (
           <div className='h-full overflow-y-auto p-6'>
-            <ImageList />
+            {isGrid ? <ImageList /> : <ImageTable />}
           </div>
         );
       case 'audio':

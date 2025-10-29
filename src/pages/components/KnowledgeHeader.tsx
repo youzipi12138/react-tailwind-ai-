@@ -11,6 +11,7 @@ const KnowledgeHeader: React.FC = () => {
     isAllSelected,
     isIndeterminate,
     toggleSelectAll,
+    setIsGrid,
   } = useImages();
 
   const checkboxRef = useRef<HTMLInputElement>(null);
@@ -45,7 +46,10 @@ const KnowledgeHeader: React.FC = () => {
               ? 'var(--color-myTexthighlight)'
               : 'var(--color-myTextColor)'
           }
-          onClick={() => setViewMode('list')}
+          onClick={() => {
+            setViewMode('list');
+            setIsGrid(false);
+          }}
         />
         <ActionIcon
           icon={LayoutGrid}
@@ -54,7 +58,10 @@ const KnowledgeHeader: React.FC = () => {
               ? 'var(--color-myTexthighlight)'
               : 'var(--color-myTextColor)'
           }
-          onClick={() => setViewMode('grid')}
+          onClick={() => {
+            setViewMode('grid');
+            setIsGrid(true);
+          }}
         />
       </div>
     </div>
