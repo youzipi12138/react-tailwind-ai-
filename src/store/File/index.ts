@@ -8,6 +8,7 @@ import type {
   FolderItem,
   CreateFolderParams,
 } from '@/services/File/types/folder';
+import { showError, showSuccess } from '@/utils/notification';
 
 // 定义 store 状态类型
 interface FileStore {
@@ -81,7 +82,6 @@ export const useFileStore = create<FileStore>((set, get) => ({
   // 创建文件夹
   createFolder: async (createFolderParams: CreateFolderParams) => {
     set({ creating: true, error: null });
-    const startTime = Date.now(); // 记录开始时间
 
     try {
       const { code, message } = await createFolderApi(createFolderParams);
@@ -90,19 +90,11 @@ export const useFileStore = create<FileStore>((set, get) => ({
       }
       // 创建成功后重新获取列表
       await get().fetchFolders();
-
-      // 确保 loading 至少显示 300ms（防止一闪而过）
-      const elapsed = Date.now() - startTime;
-      const minLoadingTime = 300; // 最短加载时间（毫秒）
-      if (elapsed < minLoadingTime) {
-        await new Promise(resolve =>
-          setTimeout(resolve, minLoadingTime - elapsed)
-        );
-      }
+      showSuccess(message);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '创建失败';
       set({ error: errorMessage });
-      throw error; // 抛出错误让调用方处理
+      showError(errorMessage);
     } finally {
       set({ creating: false });
     }
@@ -116,10 +108,11 @@ export const useFileStore = create<FileStore>((set, get) => ({
         throw new Error(message);
       }
       await get().fetchFolders();
+      showSuccess(message);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '删除失败';
       set({ error: errorMessage });
-      throw error;
+      showError(errorMessage);
     }
   },
 

@@ -18,6 +18,8 @@ export const useImages = () => {
     setIsList,
   } = useImageStore();
 
+  // 初始化时获取图片列表
+  // 注意：严格模式下会执行两次，这是正常的开发行为，生产环境不会有此问题
   useEffect(() => {
     fetchImages();
     // eslint-disable-next-line react-hooks/exhaustive-deps

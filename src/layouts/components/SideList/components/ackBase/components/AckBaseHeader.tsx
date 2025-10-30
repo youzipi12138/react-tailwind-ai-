@@ -31,7 +31,9 @@ const AckBaseHeader: React.FC<{ onShowMenu: () => void }> = ({
       form.resetFields();
       setIsShowCreateAckModal(false);
     } catch (error) {
-      console.error('Failed:', error);
+      // 创建失败时不关闭弹窗，让用户可以重试
+      // 错误消息已经在 store 中通过 showError 显示
+      console.error('创建文件夹失败:', error);
     }
   };
 

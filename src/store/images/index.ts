@@ -4,7 +4,7 @@ import {
   deleteImage as deleteImageApi,
   uploadImage as uploadImageApi,
 } from '@/services/images';
-import { showSuccess } from '@/utils/notification';
+import { showError, showSuccess } from '@/utils/notification';
 import type { ImageItem } from '@/services/images/types';
 
 // 定义 store 状态类型
@@ -51,15 +51,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
       if (code !== 200) {
         throw new Error(message);
       }
-      showSuccess(message);
-      console.log(message);
       // 合并状态更新，减少重新渲染次数
       set({ images: data, loading: false });
     } catch (error) {
       // 这里捕获的是业务错误
       const errorMessage = error instanceof Error ? error.message : '获取失败';
       set({ error: errorMessage, loading: false });
-      // 不在这里弹窗，让组件决定如何展示
+      showError(errorMessage);
     }
   },
 
@@ -72,12 +70,13 @@ export const useImageStore = create<ImageStore>((set, get) => ({
         throw new Error(message);
       }
       await get().fetchImages();
+      showSuccess(message);
       // 删除成功后清空选中状态
       set({ selectedImageIds: new Set<string>() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '删除失败';
       set({ error: errorMessage });
-      throw error;
+      showError(errorMessage);
     }
   },
 
