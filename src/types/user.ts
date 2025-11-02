@@ -25,6 +25,9 @@ export interface UserInfo {
 export interface LoginResponse {
   user: UserInfo;
   accessToken: string;
-  refreshToken: string;
+  tokenType: string;
+}
+export interface RefreshTokenResponse {
+  accessToken: string;
   tokenType: string;
 }

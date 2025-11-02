@@ -5,13 +5,13 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 import { Result } from './Result';
-
+import { useUserStore } from '@/store/User';
+import { refreshToken } from './user';
 // 定义NProgress类型
 type NProgress = {
   start: () => void;
   done: () => void;
 };
-
 // 创建axios实例
 const instance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api', // 从环境变量获取API基础URL
@@ -19,7 +19,16 @@ const instance: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
+
+// 用于存储刷新token的Promise，防止并发请求时多次刷新
+let refreshTokenPromise: Promise<string> | null = null;
+
+// 判断请求是否为刷新token的请求
+const isRefreshTokenRequest = (url?: string): boolean => {
+  return url?.includes('/auth/refresh-token') ?? false; //当前面为false时，返回false，否则返回true
+};
 
 // 请求拦截器
 instance.interceptors.request.use(
@@ -27,10 +36,10 @@ instance.interceptors.request.use(
     // 在发送请求之前做些什么
     // console.log('发送请求:', config);
 
-    // 添加token到请求头
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // 动态获取最新的 accessToken
+    const accessToken = useUserStore.getState().accessToken;
+    if (accessToken && config.headers) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     // 添加时间戳防止缓存
@@ -67,10 +76,95 @@ instance.interceptors.response.use(
     // }
     return response;
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     // 超出 2xx 范围的状态码都会触发该函数
     // console.error('响应错误:', error);
 
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    // 处理 401 错误 - 实现无感刷新token
+    if (error.response?.status === 401 && originalRequest) {
+      // 如果是刷新token接口本身返回401，说明refreshToken也过期了，需要重新登录
+      if (isRefreshTokenRequest(originalRequest.url)) {
+        useUserStore.getState().logout();
+        window.location.replace('/login');
+        const customError = new Error('登录已过期，请重新登录') as Error & {
+          code: number;
+          originalError: AxiosError;
+        };
+        customError.code = 401;
+        customError.originalError = error;
+        return Promise.reject(customError);
+      }
+
+      // 如果已经重试过，直接拒绝
+      if (originalRequest._retry) {
+        const customError = new Error('未授权，请重新登录') as Error & {
+          code: number;
+          originalError: AxiosError;
+        };
+        customError.code = 401;
+        customError.originalError = error;
+        return Promise.reject(customError);
+      }
+
+      // 标记正在重试
+      originalRequest._retry = true;
+
+      try {
+        // 如果正在刷新token，等待刷新完成（多个并发请求共享同一个刷新Promise）
+        if (!refreshTokenPromise) {
+          refreshTokenPromise = refreshToken()
+            .then(response => {
+              if (response.code === 200 || response.code === 201) {
+                const newAccessToken = response.data.accessToken;
+                // 更新store中的accessToken
+                useUserStore.getState().updateAccessToken(newAccessToken);
+                return newAccessToken;
+              } else {
+                // 刷新失败，清除token并跳转登录
+                refreshTokenPromise = null;
+                useUserStore.getState().logout();
+                window.location.href = '/login';
+                throw new Error('刷新token失败，请重新登录');
+              }
+            })
+            .finally(() => {
+              // 刷新完成后清空Promise，以便下次需要时重新刷新
+              refreshTokenPromise = null;
+            });
+        }
+
+        // 等待token刷新完成
+        await refreshTokenPromise;
+
+        // 使用新的token重试原请求
+        const newAccessToken = useUserStore.getState().accessToken;
+        if (newAccessToken && originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
+
+        // 重试原请求
+        return instance(originalRequest);
+      } catch {
+        // 刷新token失败，清除Promise并跳转登录
+        refreshTokenPromise = null;
+        useUserStore.getState().logout();
+        window.location.href = '/login';
+
+        const customError = new Error('登录已过期，请重新登录') as Error & {
+          code: number;
+          originalError: AxiosError;
+        };
+        customError.code = 401;
+        customError.originalError = error;
+        return Promise.reject(customError);
+      }
+    }
+
+    // 处理其他错误状态码
     let errorMessage = '网络错误，请稍后重试';
     let errorCode = 500;
 
@@ -82,14 +176,6 @@ instance.interceptors.response.use(
       switch (status) {
         case 400:
           errorMessage = '请求参数错误';
-          break;
-        case 401:
-          errorMessage = '未授权，请重新登录';
-          // 清除本地token
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
-          // 跳转到登录页
-          window.location.href = '/login';
           break;
         case 403:
           errorMessage = '拒绝访问';

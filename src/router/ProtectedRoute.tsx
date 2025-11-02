@@ -7,12 +7,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { user } = useUserHooks();
+  const { user, accessToken } = useUserHooks();
   const location = useLocation();
-  const token = localStorage.getItem('token');
 
-  // 如果没有 token 或用户信息，重定向到登录页
-  if (!token || !user) {
+  // 如果没有 accessToken 或用户信息，重定向到登录页
+  if (!accessToken || !user) {
     return <Navigate to='/login' replace state={{ from: location }} />;
   }
 
