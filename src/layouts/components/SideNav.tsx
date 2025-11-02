@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ActionIcon } from '@lobehub/ui';
 import {
   Compass,
@@ -8,30 +8,57 @@ import {
   SunMedium,
   MoonStar,
 } from 'lucide-react';
-
 import { Link, useLocation } from 'react-router-dom';
 import { avatar } from '@/assets';
 import './SideNav.css';
+import Usercard from './Card';
 const SideNav: React.FC = () => {
   const location = useLocation();
 
   const [isSun, setIsSun] = useState(false);
+  const [showCard, setShowCard] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLImageElement>(null);
+
+  // 点击外部区域关闭 Card
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showCard &&
+        cardRef.current &&
+        !cardRef.current.contains(event.target as Node) &&
+        avatarRef.current &&
+        !avatarRef.current.contains(event.target as Node)
+      ) {
+        setShowCard(false);
+      }
+    };
+
+    if (showCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCard]);
 
   return (
-    <div className='mt-10 flex h-[300px] flex-col items-center justify-between'>
-      <div className='avatar mb-4 h-[35px] w-[35px] overflow-hidden rounded-full'>
-        <a
-          href='https://github.com/youzipi12138'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <img
-            src={avatar}
-            alt=''
-            className='h-full w-full cursor-pointer rounded-full object-cover'
-          ></img>
-        </a>
+    <div className='relative mt-10 flex h-[300px] flex-col items-center justify-between'>
+      <div className='mb-4 h-[35px] w-[35px] overflow-hidden rounded-full'>
+        <img
+          ref={avatarRef}
+          src={avatar}
+          alt=''
+          className='h-full w-full cursor-pointer rounded-full object-cover'
+          onClick={() => setShowCard(!showCard)}
+        ></img>
       </div>
+      {showCard && (
+        <div ref={cardRef} className='absolute top-[-30px] left-[2px] z-10'>
+          <Usercard />
+        </div>
+      )}
       <Link to='/chat'>
         <ActionIcon
           icon={MessageSquare}

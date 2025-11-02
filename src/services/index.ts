@@ -87,8 +87,9 @@ instance.interceptors.response.use(
           errorMessage = '未授权，请重新登录';
           // 清除本地token
           localStorage.removeItem('token');
-          // 可以在这里跳转到登录页
-          // window.location.href = '/login';
+          localStorage.removeItem('refreshToken');
+          // 跳转到登录页
+          window.location.href = '/login';
           break;
         case 403:
           errorMessage = '拒绝访问';

@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import Layouts from '@/layouts/Layouts';
 import SideNav from '@/layouts/components/SideNav';
 import SideList from '@/layouts/components/SideList/SideList';
@@ -7,6 +8,10 @@ import { ConfigProvider } from 'antd';
 import { AppProvider } from '@/utils/appContext';
 
 function App() {
+  const location = useLocation();
+  const isAuthPage =
+    location.pathname === '/login' || location.pathname === '/register';
+
   // const [primary, setPrimary] = React.useState('#1677ff');
   return (
     <>
@@ -52,17 +57,21 @@ function App() {
         // prefixCls='lobe'
       >
         <AppProvider>
-          <Layouts
-            sidenav={<SideNav />}
-            sideList={<SideList />}
-            top={<TopBar />}
-            main={<AppRouter />}
-            // main={
-            //   <div>
-            //     <Button type='primary'>Submit</Button> <Input />
-            //   </div>
-            // }
-          />
+          {isAuthPage ? (
+            <AppRouter />
+          ) : (
+            <Layouts
+              sidenav={<SideNav />}
+              sideList={<SideList />}
+              top={<TopBar />}
+              main={<AppRouter />}
+              // main={
+              //   <div>
+              //     <Button type='primary'>Submit</Button> <Input />
+              //   </div>
+              // }
+            />
+          )}
         </AppProvider>
       </ConfigProvider>
     </>
