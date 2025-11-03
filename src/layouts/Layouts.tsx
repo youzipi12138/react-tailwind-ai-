@@ -26,11 +26,11 @@ const Layouts: React.FC<LayoutsProps> = props => {
         >
           {props.sideList}
         </div>
-        <div className='main-content flex flex-1 flex-col'>
+        <div className='main-content flex-1'>
           <div className='topbar bg-primary border-borderColor h-[60px] w-full border-b-2'>
             {props.top}
           </div>
-          <div className='main bg-primary flex-1 overflow-y-auto'>
+          <div className='main bg-primary h-[calc(100vh-60px)] overflow-hidden'>
             {props.main}
           </div>
         </div>

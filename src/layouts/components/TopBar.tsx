@@ -12,7 +12,7 @@ const TopBar: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
 
   return (
-    <div className='ml-4 flex h-full items-center'>
+    <div className='ml-4 flex h-[60px] items-center'>
       <ActionIcon
         icon={isSideListCollapsed ? PanelLeftOpen : PanelLeftClose}
         color='var(--color-myTextColor)'

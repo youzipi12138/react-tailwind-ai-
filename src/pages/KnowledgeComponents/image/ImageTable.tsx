@@ -61,7 +61,7 @@ const ImageTable: React.FC<ImageTableProps> = React.memo(
     };
 
     return (
-      <div className='w-full'>
+      <div className='h-full w-full'>
         <style>
           {`
           .fixed-height-table-wrapper {

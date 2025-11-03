@@ -12,7 +12,7 @@ interface ImageListProps {
 const ImageList: React.FC<ImageListProps> = React.memo(
   ({ images, selectedImageIds, onToggleImage }) => {
     return (
-      <div className='grid grid-cols-3 gap-4 lg:grid-cols-4 xl:grid-cols-5'>
+      <div className='flex flex-wrap gap-[8px] p-6'>
         {images.map(image => (
           <Image
             key={image.id}

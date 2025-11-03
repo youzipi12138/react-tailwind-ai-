@@ -1,7 +1,7 @@
 import React from 'react';
 import type { ImageItem } from '@/services/images/types';
 import { formatFileSize } from '@/utils/format';
-
+import { placeholder } from '@/assets';
 // 部分	含义
 // React.FC	React Function Component（函数组件类型）
 // <ImageItem>	泛型参数：指定这个组件的 props 类型是 ImageItem
@@ -12,18 +12,22 @@ const Image: React.FC<
     isSelected: boolean;
     onToggle: () => void;
   }
-> = ({ path, filename, size, isSelected, onToggle }) => {
+> = ({ path, originalname, size, isSelected, onToggle }) => {
   return (
     <div
-      className={`group relative aspect-square w-full overflow-hidden rounded-md border-2 transition-all duration-150 ${
+      className={`group relative aspect-square h-[256px] w-[256px] overflow-hidden rounded-md border-2 transition-all duration-150 ${
         isSelected
           ? 'border-myTexthighlight'
           : 'hover:border-myTexthighlight border-transparent'
       }`}
     >
       <img
-        src={path}
-        alt={filename}
+        src={path || placeholder}
+        loading='lazy'
+        onError={e => {
+          e.currentTarget.src = placeholder;
+        }}
+        alt={originalname}
         className={`h-full w-full object-cover transition-all duration-300 ${
           isSelected ? 'brightness-60' : 'group-hover:brightness-60'
         }`}
@@ -43,7 +47,7 @@ const Image: React.FC<
           onChange={onToggle}
         />
         <p className='text-lightTextColor mb-1 max-w-[90%] overflow-hidden px-2 text-center text-xs font-semibold text-ellipsis whitespace-nowrap'>
-          {filename}
+          {originalname}
         </p>
         <p className='text-myTextHighlight text-[12px]'>
           {formatFileSize(size)}

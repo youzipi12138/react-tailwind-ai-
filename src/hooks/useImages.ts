@@ -5,10 +5,12 @@ export const useImages = () => {
   const {
     images,
     loading,
+    loadingMore,
     error,
     selectedImageIds,
     isGrid,
     fetchImages,
+    loadMore,
     clearError,
     deleteImage,
     uploadImage,
@@ -16,6 +18,7 @@ export const useImages = () => {
     toggleSelectAll,
     setIsGrid,
     setIsList,
+    hasMore,
   } = useImageStore();
 
   // 初始化时获取图片列表
@@ -36,12 +39,15 @@ export const useImages = () => {
     selectedCount: selectedImageIds.size,
     images,
     loading,
+    loadingMore,
     error,
     selectedImageIds,
     isAllSelected,
     isIndeterminate,
     isGrid,
     fetchImages,
+    loadMore,
+    hasMore,
     clearError,
     deleteImage,
     uploadImage,

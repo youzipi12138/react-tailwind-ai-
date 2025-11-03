@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useImages } from '@/hooks/useImages';
 import KnowledgeHeader from '../../components/KnowledgeHeader';
 import ImageList from './index';
@@ -14,10 +14,14 @@ const ImagesView: React.FC = () => {
     isIndeterminate,
     selectedImageIds,
     isGrid,
+    hasMore,
+    loading,
+    loadingMore,
     deleteImage,
     toggleSelectAll,
     toggleImageSelection,
     setIsGrid,
+    loadMore,
   } = useImages();
 
   // 使用 useCallback 缓存回调函数，避免每次渲染都创建新的函数引用
@@ -34,8 +38,30 @@ const ImagesView: React.FC = () => {
     [selectedImageIds]
   );
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    const sentinel = sentinelRef.current;
+    if (!container || !sentinel) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const entry = entries[0];
+        if (entry.isIntersecting && hasMore && !loading && !loadingMore) {
+          loadMore();
+        }
+      },
+      { root: container, rootMargin: '0px', threshold: 0.1 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, loadMore]);
+
   return (
-    <div className='h-full'>
+    <div className='flex h-full flex-col overflow-hidden'>
       {imageCount > 0 && (
         <KnowledgeHeader
           imageCount={imageCount}
@@ -49,14 +75,20 @@ const ImagesView: React.FC = () => {
           isGrid={isGrid}
         />
       )}
-      <div className='flex h-full justify-center overflow-y-auto p-6'>
+      <div className='min-h-0 flex-1 overflow-y-auto' ref={scrollContainerRef}>
         {imageCount > 0 ? (
           isGrid ? (
-            <ImageList
-              images={images}
-              selectedImageIds={selectedImageIds}
-              onToggleImage={handleToggleImage}
-            />
+            <div className='w-full'>
+              <ImageList
+                images={images}
+                selectedImageIds={selectedImageIds}
+                onToggleImage={handleToggleImage}
+              />
+              <div ref={sentinelRef} className='h-8 w-full' />
+              <div className='py-4 text-center text-sm text-gray-400'>
+                {loadingMore ? '加载中…' : hasMore ? '' : '没有更多了'}
+              </div>
+            </div>
           ) : (
             <ImageTable
               images={images}

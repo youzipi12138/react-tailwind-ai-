@@ -40,6 +40,7 @@ const ImagesUpload: React.FC = () => {
       key: 'uploadFile',
       label: (
         <Upload
+          multiple
           customRequest={async ({ file }) => {
             await customUpload(file as File);
           }}

@@ -12,12 +12,17 @@ interface ImageStore {
   // 状态
   images: ImageItem[];
   loading: boolean; // 获取列表的加载状态
+  loadingMore: boolean; // 加载更多状态
   error: string | null;
   selectedImageIds: Set<string>; // 选中的图片 ID 集合
   isGrid: boolean;
   isList: boolean;
+  offset: number;
+  limit: number;
+  hasMore: boolean;
   // 操作
   fetchImages: () => Promise<void>;
+  loadMore: () => Promise<void>;
   // eslint-disable-next-line no-unused-vars
   deleteImage: (ids: string[]) => Promise<void>;
   // eslint-disable-next-line no-unused-vars
@@ -37,26 +42,63 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   // 初始状态
   images: [],
   loading: false,
+  loadingMore: false,
   error: null,
   selectedImageIds: new Set<string>(),
   isGrid: false,
   isList: false,
-  // 获取图片列表
+  offset: 0,
+  limit: 20,
+  hasMore: true,
+
+  // 首次/刷新获取图片列表（重置 offset）
   fetchImages: async () => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, offset: 0, hasMore: true });
 
     try {
-      const { data, code, message } = await getImageList();
-      // 处理业务逻辑错误
+      const { data, code, message } = await getImageList({
+        offset: 0,
+        limit: get().limit,
+      });
       if (code !== 200) {
         throw new Error(message);
       }
-      // 合并状态更新，减少重新渲染次数
-      set({ images: data, loading: false });
+      const nextOffset = data.length;
+      const hasMore = data.length >= get().limit;
+      set({ images: data, loading: false, offset: nextOffset, hasMore });
     } catch (error) {
-      // 这里捕获的是业务错误
       const errorMessage = error instanceof Error ? error.message : '获取失败';
       set({ error: errorMessage, loading: false });
+      showError(errorMessage);
+    }
+  },
+
+  // 加载更多（分页追加）
+  loadMore: async () => {
+    const { loading, loadingMore, hasMore, offset, limit, images } = get();
+    if (loading || loadingMore || !hasMore) return;
+    set({ loadingMore: true });
+    try {
+      const { data, code, message } = await getImageList({ offset, limit });
+      if (code !== 200) {
+        throw new Error(message);
+      }
+      const appended = [...images, ...data];
+      const nextOffset = offset + data.length;
+      const stillHasMore = data.length >= limit;
+      set({
+        images: appended,
+        offset: nextOffset,
+        hasMore: stillHasMore,
+        loadingMore: false,
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : '加载更多失败';
+      set({
+        error: errorMessage,
+        loadingMore: false,
+      });
       showError(errorMessage);
     }
   },
@@ -89,9 +131,7 @@ export const useImageStore = create<ImageStore>((set, get) => ({
         throw new Error(message);
       }
       await get().fetchImages();
-      console.log('上传成功');
     } catch (error) {
-      console.error('❌ [Store] 上传失败:', error);
       const errorMessage = error instanceof Error ? error.message : '上传失败';
       set({ error: errorMessage });
       throw error;

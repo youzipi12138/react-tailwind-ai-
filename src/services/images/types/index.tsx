@@ -4,4 +4,5 @@ export interface ImageItem {
   size: number;
   path: string;
   createdAt: string;
+  originalname: string;
 }

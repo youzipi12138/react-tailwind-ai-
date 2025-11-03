@@ -2,8 +2,12 @@ import { get, Delete, upload } from '@/services/index';
 import type { ImageItem } from './types/index';
 import Result from '../Result';
 
-export const getImageList: () => Promise<Result<ImageItem[]>> = () => {
-  return get('/images');
+// eslint-disable-next-line no-unused-vars
+export const getImageList: (data: {
+  offset: number;
+  limit: number;
+}) => Promise<Result<ImageItem[]>> = data => {
+  return get('/images', data);
 };
 
 export const deleteImage = (ids: string[]): Promise<Result<void>> => {
