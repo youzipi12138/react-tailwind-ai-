@@ -27,7 +27,7 @@ let refreshTokenPromise: Promise<string> | null = null;
 
 // 判断请求是否为刷新token的请求
 const isRefreshTokenRequest = (url?: string): boolean => {
-  return url?.includes('/auth/refresh-token') ?? false; //当前面为false时，返回false，否则返回true
+  return url?.includes('/auth/refresh') ?? false; //当前面为false时，返回false，否则返回true
 };
 
 // 请求拦截器
@@ -86,6 +86,7 @@ instance.interceptors.response.use(
 
     // 处理 401 错误 - 实现无感刷新token
     if (error.response?.status === 401 && originalRequest) {
+      //提前判断是否是刷新token接口本身返回401，如果是，则直接重新登录
       // 如果是刷新token接口本身返回401，说明refreshToken也过期了，需要重新登录
       if (isRefreshTokenRequest(originalRequest.url)) {
         useUserStore.getState().logout();
@@ -110,13 +111,14 @@ instance.interceptors.response.use(
         return Promise.reject(customError);
       }
 
+      // 一开始执行代码从这里开始
       // 标记正在重试
       originalRequest._retry = true;
 
       try {
         // 如果正在刷新token，等待刷新完成（多个并发请求共享同一个刷新Promise）
         if (!refreshTokenPromise) {
-          refreshTokenPromise = refreshToken()
+          refreshTokenPromise = refreshToken() //promise 写法，返回一个Promise对象，用于等待刷新token完成
             .then(response => {
               if (response.code === 200 || response.code === 201) {
                 const newAccessToken = response.data.accessToken;
@@ -152,7 +154,7 @@ instance.interceptors.response.use(
         // 刷新token失败，清除Promise并跳转登录
         refreshTokenPromise = null;
         useUserStore.getState().logout();
-        window.location.href = '/login';
+        window.location.replace('/login');
 
         const customError = new Error('登录已过期，请重新登录') as Error & {
           code: number;
