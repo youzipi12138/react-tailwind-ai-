@@ -7,6 +7,7 @@ import axios, {
 import { Result } from './Result';
 import { useUserStore } from '@/store/User';
 import { refreshToken } from './user';
+import type { UploadOptions } from '@/types/upload';
 // 定义NProgress类型
 type NProgress = {
   start: () => void;
@@ -292,15 +293,6 @@ export const Delete = <T>(
 /**
  * 文件上传接口配置
  */
-export interface UploadOptions {
-  url: string; // 上传地址
-  file: File; // 文件对象
-  fieldName?: string; // 文件字段名，默认 'file_to_upload'
-  // eslint-disable-next-line no-unused-vars
-  onProgress?: (percent: number) => void; // 上传进度回调
-  data?: Record<string, string | Blob>; // 额外的表单数据
-  timeout?: number; // 超时时间
-}
 
 /**
  * 通用文件上传方法
