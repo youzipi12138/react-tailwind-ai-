@@ -20,13 +20,21 @@ interface ImageStore {
   offset: number;
   limit: number;
   hasMore: boolean;
+  progress: number;
   // 操作
   fetchImages: () => Promise<void>;
   loadMore: () => Promise<void>;
   // eslint-disable-next-line no-unused-vars
   deleteImage: (ids: string[]) => Promise<void>;
-  // eslint-disable-next-line no-unused-vars
-  uploadImage: (file: File) => Promise<void>;
+  uploadImage: (
+    // eslint-disable-next-line no-unused-vars
+    file: File,
+    // eslint-disable-next-line no-unused-vars
+    options?: {
+      // eslint-disable-next-line no-unused-vars
+      onProgress?: (percent: number) => void;
+    }
+  ) => Promise<void>;
   clearError: () => void;
   // eslint-disable-next-line no-unused-vars
   toggleImageSelection: (id: string) => void; // 切换单个图片选中状态
@@ -50,7 +58,7 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   offset: 0,
   limit: 20,
   hasMore: true,
-
+  progress: 0,
   // 首次/刷新获取图片列表（重置 offset）
   fetchImages: async () => {
     set({ loading: true, error: null, offset: 0, hasMore: true });
@@ -125,7 +133,11 @@ export const useImageStore = create<ImageStore>((set, get) => ({
   // 上传图片
   uploadImage: async (file: File) => {
     try {
-      const { code, message } = await uploadImageApi(file);
+      const { code, message } = await uploadImageApi(file, {
+        onProgress: (percent: number) => {
+          set({ progress: percent });
+        },
+      });
       // 处理业务逻辑错误
       if (code !== 201) {
         throw new Error(message);

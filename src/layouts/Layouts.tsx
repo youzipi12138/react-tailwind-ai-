@@ -1,5 +1,6 @@
 import React from 'react'; // 需引入 React 类型
 import { useUIStore } from '@/store/ui';
+import { UploadProgress } from '@/components/UploadProgress';
 
 // 定义 Layouts 组件的 props 类型接口
 interface LayoutsProps {
@@ -34,6 +35,9 @@ const Layouts: React.FC<LayoutsProps> = props => {
             {props.main}
           </div>
         </div>
+      </div>
+      <div className='upload-progress fixed right-10 bottom-10'>
+        <UploadProgress />
       </div>
     </div>
   );
